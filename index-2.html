@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ULM Warhawks Dynasty Hub</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.31.0/webfont/tabler-icons.min.css">
+<style>
+:root{
+  --color-background-primary:#ffffff;
+  --color-background-secondary:#f7f7f5;
+  --color-text-primary:#1a1a1a;
+  --color-text-secondary:#6b6b6b;
+  --color-text-tertiary:#9b9b9b;
+  --color-border-primary:#d0d0d0;
+  --color-border-secondary:#e0e0e0;
+  --color-border-tertiary:#ececec;
+  --border-radius-sm:4px;
+  --border-radius-md:6px;
+  --border-radius-lg:10px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --color-background-primary:#1a1a1a;
+    --color-background-secondary:#252525;
+    --color-text-primary:#f0f0f0;
+    --color-text-secondary:#a0a0a0;
+    --color-text-tertiary:#686868;
+    --color-border-primary:#444;
+    --color-border-secondary:#333;
+    --color-border-tertiary:#2c2c2c;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+body{background:var(--color-background-primary);color:var(--color-text-primary)}
+.hub{display:flex;min-height:100vh;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.sidebar{width:172px;min-width:172px;border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;padding:.625rem 0;overflow-y:auto;position:sticky;top:0;height:100vh}
+.sb-logo{padding:10px 14px 12px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:6px}
+.sb-logo-title{font-size:13px;font-weight:600;color:var(--color-text-primary)}
+.sb-logo-sub{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
+.sb-grp{font-size:10px;color:var(--color-text-tertiary);padding:10px 14px 3px;text-transform:uppercase;letter-spacing:.07em;font-weight:500}
+.sb-item{display:flex;align-items:center;gap:8px;padding:5px 14px;font-size:12.5px;color:var(--color-text-secondary);cursor:pointer;transition:background .12s;border-radius:0}
+.sb-item:hover,.sb-item.on{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.sb-item i{font-size:14px;width:15px;flex-shrink:0}
+.content{flex:1;overflow-y:auto;padding:1.5rem 1.75rem;min-width:0}
+.page{display:none}.page.on{display:block}
+h2{font-size:18px;font-weight:600;margin-bottom:2px}
+.sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:1.25rem}
+.sec{font-size:11.5px;font-weight:600;color:var(--color-text-primary);margin:1.25rem 0 .5rem;padding-bottom:4px;border-bottom:0.5px solid var(--color-border-tertiary);text-transform:uppercase;letter-spacing:.04em}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:1rem}
+.mc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.625rem .75rem;border:0.5px solid var(--color-border-tertiary)}
+.mc-lbl{font-size:10px;color:var(--color-text-tertiary);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+.mc-val{font-size:20px;font-weight:600;color:var(--color-text-primary);line-height:1}
+.mc-sub{font-size:10px;color:var(--color-text-secondary);margin-top:3px;line-height:1.4}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{font-size:10px;color:var(--color-text-tertiary);text-align:left;padding:4px 8px 6px;border-bottom:0.5px solid var(--color-border-secondary);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.tbl td{padding:6px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--color-background-secondary)}
+.tbl-wrap{overflow-x:auto;margin-bottom:.875rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md)}
+.pw{background:#EAF3DE;color:#27500A;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600;display:inline-block}
+.pl{background:#FCEBEB;color:#791F1F;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600;display:inline-block}
+.pn{background:#F1EFE8;color:#555;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600;display:inline-block}
+.pt{background:#FAEEDA;color:#633806;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600;display:inline-block}
+.badge{display:inline-block;padding:2px 8px;border-radius:var(--border-radius-md);font-size:11px;font-weight:600}
+.bg{background:#EAF3DE;color:#27500A}.bb{background:#E6F1FB;color:#0C447C}.br{background:#FCEBEB;color:#791F1F}.ba{background:#FAEEDA;color:#633806}.bp{background:#EEEDFE;color:#3C3489}.bgr{background:#F1EFE8;color:#444}
+.raised{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.875rem}
+.game-row{display:grid;grid-template-columns:36px 1fr 80px 24px;gap:8px;align-items:center;padding:7px 10px;border-radius:var(--border-radius-md);cursor:pointer;font-size:12px;border:0.5px solid transparent;margin-bottom:2px}
+.game-row:hover{background:var(--color-background-secondary);border-color:var(--color-border-tertiary)}
+.game-row.bye{opacity:.4;cursor:default;pointer-events:none}
+.wk-lbl{font-size:10px;color:var(--color-text-tertiary);text-align:center;font-weight:500}
+.detail-panel{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.125rem;margin-top:.875rem;border:0.5px solid var(--color-border-tertiary)}
+.detail-close{font-size:11px;color:var(--color-text-secondary);cursor:pointer;padding:3px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary)}
+.detail-close:hover{border-color:var(--color-border-primary)}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:.75rem 0}
+.stat-box{background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:.5rem .625rem;border:0.5px solid var(--color-border-tertiary)}
+.stat-lbl{font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.stat-val{font-size:13px;font-weight:500}
+.season-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:1rem}
+.stab{font-size:11px;padding:3px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:all .1s}
+.stab:hover{border-color:var(--color-border-primary);color:var(--color-text-primary)}
+.stab.on{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:600}
+.award-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;gap:12px}
+.award-row:last-child{border-bottom:none}
+.yr-chip{background:var(--color-background-secondary);padding:2px 8px;border-radius:var(--border-radius-md);font-size:11px;color:var(--color-text-secondary);white-space:nowrap;border:0.5px solid var(--color-border-tertiary)}
+.hof-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.75rem .875rem;margin-bottom:7px}
+.hof-ring{background:#FEFBF3;border-color:#EF9F27}
+.hof-name{font-size:13px;font-weight:600}
+.hof-meta{font-size:11px;color:var(--color-text-secondary);margin-top:3px;line-height:1.5}
+.hof-stat{font-size:11px;color:var(--color-text-tertiary);margin-top:3px;line-height:1.5}
+.placeholder{border:1px dashed var(--color-border-secondary);border-radius:var(--border-radius-md);padding:2rem;text-align:center;color:var(--color-text-tertiary);font-size:12px;margin:.5rem 0;line-height:1.7}
+.rivalry-note{font-size:11.5px;color:var(--color-text-secondary);margin-top:.625rem;padding:.75rem 1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border-left:3px solid #E24B4A;line-height:1.7}
+.warn-note{font-size:11px;color:var(--color-text-tertiary);margin-top:.625rem;padding:.625rem .875rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border-left:3px solid #EF9F27;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="hub">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-title">🏈 ULM Warhawks</div>
+    <div class="sb-logo-sub">Obonga Dynasty · 2025–2039</div>
+  </div>
+  <div class="sb-grp">Dynasty</div>
+  <div class="sb-item on" onclick="nav(this,'overview')"><i class="ti ti-layout-dashboard"></i> Overview</div>
+  <div class="sb-item" onclick="nav(this,'seasons')"><i class="ti ti-calendar-stats"></i> Seasons</div>
+  <div class="sb-item" onclick="nav(this,'schedule')"><i class="ti ti-calendar"></i> Schedule</div>
+  <div class="sb-item" onclick="nav(this,'roster')"><i class="ti ti-users"></i> Roster</div>
+  <div class="sb-item" onclick="nav(this,'stats')"><i class="ti ti-chart-bar"></i> Stats</div>
+  <div class="sb-grp">Program</div>
+  <div class="sb-item" onclick="nav(this,'awards')"><i class="ti ti-trophy"></i> Awards</div>
+  <div class="sb-item" onclick="nav(this,'hof')"><i class="ti ti-star"></i> Hall of Fame</div>
+  <div class="sb-item" onclick="nav(this,'coaching')"><i class="ti ti-briefcase"></i> Coaching</div>
+  <div class="sb-item" onclick="nav(this,'recruiting')"><i class="ti ti-user-plus"></i> Recruiting</div>
+  <div class="sb-item" onclick="nav(this,'lore')"><i class="ti ti-book"></i> Lore</div>
+  <div class="sb-grp">Export</div>
+  <div class="sb-item" onclick="nav(this,'notion')"><i class="ti ti-upload"></i> Notion Guide</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div class="page on" id="p-overview">
+  <h2>ULM Warhawks Dynasty</h2>
+  <p class="sub">Head Coach Barack Obonga · Sun Belt (2025–2033) → Big 12 (2034–present) · Year 15 (2039)</p>
+
+  <div class="sec">Program milestones</div>
+  <div class="cards">
+    <div class="mc"><div class="mc-lbl">National titles</div><div class="mc-val">1</div><div class="mc-sub">2037 — 17–15 vs #2 USC</div></div>
+    <div class="mc"><div class="mc-lbl">Conf. titles won</div><div class="mc-val">4</div><div class="mc-sub">2× SBC · 2× Big 12<br><span style="font-size:9px;color:var(--color-text-tertiary)">7 CCG appearances</span></div></div>
+    <div class="mc"><div class="mc-lbl">CFP appearances</div><div class="mc-val">4</div><div class="mc-sub">2032 · 2034 · 2036 · 2037</div></div>
+    <div class="mc"><div class="mc-lbl">Heisman winners</div><div class="mc-val">3</div><div class="mc-sub">Abreu · Laird · Portilla</div></div>
+    <div class="mc"><div class="mc-lbl">1st-round picks</div><div class="mc-val">2</div><div class="mc-sub">Mondeaux (2034)<br>Golden (2038)</div></div>
+    <div class="mc"><div class="mc-lbl">Total draft picks</div><div class="mc-val">21</div><div class="mc-sub">2029–2038</div></div>
+  </div>
+
+  <div class="sec">All-time record (Obonga era)</div>
+  <div class="cards">
+    <div class="mc"><div class="mc-lbl">Overall</div><div class="mc-val">131–64</div><div class="mc-sub">Obonga era</div></div>
+    <div class="mc"><div class="mc-lbl">Home</div><div class="mc-val">63–19</div><div class="mc-sub">At Malone Stadium</div></div>
+    <div class="mc"><div class="mc-lbl">Away</div><div class="mc-val">49–22</div><div class="mc-sub">Road games</div></div>
+    <div class="mc"><div class="mc-lbl">Neutral</div><div class="mc-val">8–5</div><div class="mc-sub">Bowls · CCGs · CFP</div></div>
+  </div>
+
+  <div class="sec">Streaks</div>
+  <div class="cards">
+    <div class="mc"><div class="mc-lbl">Longest win streak</div><div class="mc-val">15</div><div class="mc-sub">2036 season — lost opener to Texas A&M, then 15 straight</div></div>
+    <div class="mc"><div class="mc-lbl">Longest home streak</div><div class="mc-val">18</div><div class="mc-sub">Oct 6, 2035 – Nov 7, 2037<br>Ended: Senior Night vs #8 TCU 10–17</div></div>
+  </div>
+
+  <div class="sec">Postseason record</div>
+  <div class="cards">
+    <div class="mc"><div class="mc-lbl">CCG record</div><div class="mc-val">4–3</div><div class="mc-sub">1–2 vs Colorado in CCGs</div></div>
+    <div class="mc"><div class="mc-lbl">Bowl record</div><div class="mc-val">4–3</div><div class="mc-sub">Non-CFP bowl games</div></div>
+    <div class="mc"><div class="mc-lbl">CFP record</div><div class="mc-val">8–3</div><div class="mc-sub">11 playoff games total</div></div>
+  </div>
+
+  <div class="sec">Conference championship game history (4–3)</div>
+  <div class="tbl-wrap">
+  <table class="tbl">
+    <thead><tr><th>Year</th><th>Result</th><th>Opponent</th><th>Score</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>2031</td><td><span class="pl">L</span></td><td>Old Dominion</td><td>53–55</td><td>2-point loss — heartbreaker</td></tr>
+      <tr><td>2032</td><td><span class="pw">W</span></td><td>Marshall</td><td>45–7</td><td>First CCG win — dominant</td></tr>
+      <tr><td>2033</td><td><span class="pw">W</span></td><td>Marshall</td><td>49–45</td><td>Back-to-back — thriller</td></tr>
+      <tr><td>2034</td><td><span class="pw">W</span></td><td>Colorado</td><td>28–21</td><td>Big 12 debut CCG win</td></tr>
+      <tr><td>2035</td><td><span class="pl">L</span></td><td>Colorado</td><td>35–45</td><td>Revenge loss — two KR TDs surrendered</td></tr>
+      <tr><td>2036</td><td><span class="pw">W</span></td><td>Arizona State</td><td>42–25</td><td>4th conference title</td></tr>
+      <tr><td>2038</td><td><span class="pl">L</span></td><td>Colorado</td><td>21–31</td><td>Gammon 353 yds 4 TD — Colorado 3-for-3 vs ULM in CCGs</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="warn-note">CCG record vs Colorado: <strong>1–2</strong> (won 2034, lost 2035 and 2038). Overall record vs Colorado all-time: <strong>4–4</strong>.</div>
+
+  <div class="sec">CFP bracket history (8–3)</div>
+  <div class="tbl-wrap">
+  <table class="tbl">
+    <thead><tr><th>Year</th><th>Round</th><th>Result</th><th>Score</th><th>Opponent</th></tr></thead>
+    <tbody>
+      <tr><td>2032</td><td>R1</td><td><span class="pl">L</span></td><td>28–35</td><td>#5 Michigan State</td></tr>
+      <tr><td>2034</td><td>QF</td><td><span class="pw">W</span></td><td>21–17</td><td>#6 Florida (Orange Bowl)</td></tr>
+      <tr><td>2034</td><td>SF</td><td><span class="pl">L</span></td><td>21–31</td><td>#2 Oregon (Fiesta Bowl)</td></tr>
+      <tr><td>2036</td><td>R1</td><td><span class="pw">W</span></td><td>50–0</td><td>#12 Colorado</td></tr>
+      <tr><td>2036</td><td>QF</td><td><span class="pw">W</span></td><td>52–24</td><td>#7 Ohio State</td></tr>
+      <tr><td>2036</td><td>SF</td><td><span class="pw">W</span></td><td>31–23</td><td>#3 Nebraska</td></tr>
+      <tr><td>2036</td><td>NCG</td><td><span class="pl">L</span></td><td>21–48</td><td>#1 Georgia</td></tr>
+      <tr><td>2037</td><td>R1</td><td><span class="pw">W</span></td><td>28–10</td><td>#5 Texas</td></tr>
+      <tr><td>2037</td><td>QF</td><td><span class="pw">W</span></td><td>52–6</td><td>#4 Penn State (Sugar Bowl)</td></tr>
+      <tr><td>2037</td><td>SF</td><td><span class="pw">W</span></td><td>28–25</td><td>#8 Georgia (Peach Bowl)</td></tr>
+      <tr><td>2037</td><td>NCG</td><td><span class="pt">🏆 W</span></td><td>17–15</td><td>#2 USC — NATIONAL CHAMPIONS</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="sec">Bowl game history — non-CFP (4–3)</div>
+  <div class="tbl-wrap">
+  <table class="tbl">
+    <thead><tr><th>Year</th><th>Result</th><th>Bowl</th><th>Opponent</th><th>Score</th></tr></thead>
+    <tbody>
+      <tr><td>2025</td><td><span class="pl">L</span></td><td>Boca Raton Bowl</td><td>Liberty</td><td>32–34 (3OT)</td></tr>
+      <tr><td>2029</td><td><span class="pl">L</span></td><td>Boca Raton Bowl</td><td>Sam Houston</td><td>17–52</td></tr>
+      <tr><td>2030</td><td><span class="pw">W</span></td><td>Boca Raton Bowl</td><td>FIU</td><td>52–50 — <em>first bowl win in program history</em></td></tr>
+      <tr><td>2031</td><td><span class="pw">W</span></td><td>—</td><td>Missouri State</td><td>49–13</td></tr>
+      <tr><td>2033</td><td><span class="pw">W</span></td><td>—</td><td>Navy</td><td>63–5</td></tr>
+      <tr><td>2035</td><td><span class="pw">W</span></td><td>Alamo Bowl</td><td>Utah</td><td>57–22</td></tr>
+      <tr><td>2038</td><td><span class="pl">L</span></td><td>Alamo Bowl</td><td>Boise State</td><td>28–30</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="sec">ULM vs Colorado — rivalry all-time (4–4)</div>
+  <div class="tbl-wrap">
+  <table class="tbl">
+    <thead><tr><th>Year</th><th>Location</th><th>Result</th><th>Score</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>2034</td><td>Away</td><td><span class="pw">W</span></td><td>49–20</td><td>@ #5 Colorado — Laird breaks school records</td></tr>
+      <tr><td>2034</td><td>Neutral (CCG)</td><td><span class="pw">W</span></td><td>28–21</td><td>Big 12 Championship — first P4 title</td></tr>
+      <tr><td>2035</td><td>Neutral (CCG)</td><td><span class="pl">L</span></td><td>35–45</td><td>Two KR TDs, defense crumbles</td></tr>
+      <tr><td>2036</td><td>Home</td><td><span class="pw">W</span></td><td>35–10</td><td>vs #14 Colorado — College GameDay, statement win</td></tr>
+      <tr><td>2036</td><td>Home (CFP R1)</td><td><span class="pw">W</span></td><td>50–0</td><td>CFP First Round — historic shutout</td></tr>
+      <tr><td>2037</td><td>Away</td><td><span class="pl">L</span></td><td>21–28</td><td>@ #11 Colorado — lateral intercepted with 24 sec left</td></tr>
+      <tr><td>2038</td><td>Away</td><td><span class="pl">L</span></td><td>12–23</td><td>@ #9 Colorado — offense stalled, part of 0-3 Big 12 start</td></tr>
+      <tr><td>2038</td><td>Neutral (CCG)</td><td><span class="pl">L</span></td><td>21–31</td><td>Big 12 Championship — Gammon 353 yds 4 TD</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="rivalry-note">ULM is <strong>3–0 at home</strong> vs Colorado (including the CFP shutout) but <strong>1–4 on the road and neutral site</strong>. Colorado is ULM's biggest rival and clearest kryptonite in the Big 12 era — 3-for-3 in championship game appearances.</div>
+
+  <div class="sec">Program firsts</div>
+  <div class="raised">
+    <div class="award-row"><span>First bowl game</span><span class="yr-chip">2025 — L 32–34 (3OT) vs Liberty</span></div>
+    <div class="award-row"><span>First bowl win</span><span class="yr-chip">2030 — W 52–50 vs FIU (Boca Raton)</span></div>
+    <div class="award-row"><span>First 10-win season</span><span class="yr-chip">2031 — 12–2</span></div>
+    <div class="award-row"><span>First Sun Belt Championship</span><span class="yr-chip">2032 — W 45–7 vs Marshall</span></div>
+    <div class="award-row"><span>First Heisman Trophy</span><span class="yr-chip">2032 — Barry Abreu HB</span></div>
+    <div class="award-row"><span>First CFP appearance</span><span class="yr-chip">2032 — #12 seed</span></div>
+    <div class="award-row"><span>First NFL 1st-round pick</span><span class="yr-chip">2034 — Niles Mondeaux RT</span></div>
+    <div class="award-row"><span>First Big 12 Championship</span><span class="yr-chip">2034 — W 28–21 vs Colorado</span></div>
+    <div class="award-row"><span>First #1 national ranking</span><span class="yr-chip">2037</span></div>
+    <div class="award-row"><span>🏆 National Championship</span><span class="yr-chip">2037 — W 17–15 vs #2 USC</span></div>
+  </div>
+</div>
+
+<!-- ═══ SEASONS ═══ -->
+<div class="page" id="p-seasons">
+  <h2>Season-by-Season Summary</h2>
+  <p class="sub">All 15 seasons of the Obonga era · click a row for details</p>
+  <div class="tbl-wrap">
+  <table class="tbl">
+    <thead><tr><th>Season</th><th>Record</th><th>Conference</th><th>Postseason</th></tr></thead>
+    <tbody>
+      <tr><td>2025</td><td>6–7</td><td>Sun Belt</td><td>Bowl L vs Liberty 32–34 (3OT, Boca Raton)</td></tr>
+      <tr><td>2026</td><td>3–9</td><td>Sun Belt</td><td>No bowl</td></tr>
+      <tr><td>2027</td><td>4–8</td><td>Sun Belt</td><td>No bowl</td></tr>
+      <tr><td>2028</td><td>5–8</td><td>Sun Belt</td><td>No bowl</td></tr>
+      <tr><td>2029</td><td>7–6</td><td>Sun Belt</td><td>Bowl L vs Sam Houston 17–52 (Boca Raton)</td></tr>
+      <tr><td>2030</td><td>8–5</td><td>Sun Belt</td><td>Bowl W vs FIU 52–50 (Boca Raton) — first bowl win</td></tr>
+      <tr><td>2031</td><td>12–2</td><td>Sun Belt</td><td>CCG L vs Old Dominion 53–55 · Bowl W vs Missouri State 49–13</td></tr>
+      <tr><td>2032</td><td>11–3</td><td>Sun Belt</td><td>CCG W vs Marshall 45–7 · CFP R1 L vs Michigan State 28–35</td></tr>
+      <tr><td>2033</td><td>12–2</td><td>Sun Belt</td><td>CCG W vs Marshall 49–45 · Bowl W vs Navy 63–5</td></tr>
+      <tr><td>2034</td><td>14–2</td><td>Big 12</td><td>CCG W vs Colorado 28–21 · CFP QF W vs Florida 21–17 · SF L vs Oregon 21–31</td></tr>
+      <tr><td>2035</td><td>11–3</td><td>Big 12</td><td>CCG L vs Colorado 35–45 · Alamo Bowl W vs Utah 57–22</td></tr>
+      <tr><td>2036</td><td>15–2</td><td>Big 12</td><td>CCG W vs Arizona State 42–25 · CFP R1/QF/SF W · NCG L vs Georgia 21–48</td></tr>
+      <tr><td>2037</td><td>14–2</td><td>Big 12</td><td>At-large CFP · R1/QF/SF/NCG all W · <strong>🏆 NATIONAL CHAMPIONS 17–15 vs USC</strong></td></tr>
+      <tr><td>2038</td><td>9–5</td><td>Big 12</td><td>CCG L vs Colorado 21–31 · Alamo Bowl L vs Boise State 28–30</td></tr>
+      <tr><td>2039</td><td>—</td><td>Big 12</td><td>In progress</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ═══ SCHEDULE ═══ -->
+<div class="page" id="p-schedule">
+  <h2>Schedule</h2>
+  <p class="sub">Click any game to view game details · 2025 &amp; 2032 have full data loaded</p>
+  <div class="season-tabs" id="sched-tabs"></div>
+  <div id="sched-list"></div>
+  <div id="game-detail" style="display:none"></div>
+</div>
+
+<!-- ═══ ROSTER ═══ -->
+<div class="page" id="p-roster">
+  <h2>Roster</h2>
+  <p class="sub">Full depth chart by season · paste your rosters in season by season</p>
+  <div class="season-tabs" id="roster-tabs"></div>
+  <div id="roster-content">
+    <div class="placeholder">
+      <i class="ti ti-users" style="font-size:26px;display:block;margin-bottom:.625rem"></i>
+      Select a season above to view the full depth chart.<br>Rosters to be pasted in one season at a time.
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STATS ═══ -->
+<div class="page" id="p-stats">
+  <h2>Statistics</h2>
+  <p class="sub">Team · national · conference · individual stats by season</p>
+  <div class="season-tabs" id="stats-tabs"></div>
+  <div class="sec">Team offense</div>
+  <div class="placeholder"><i class="ti ti-chart-bar" style="font-size:20px;display:block;margin-bottom:.375rem"></i>Team offensive stats — to be filled per season</div>
+  <div class="sec">Team defense</div>
+  <div class="placeholder"><i class="ti ti-shield" style="font-size:20px;display:block;margin-bottom:.375rem"></i>Team defensive stats — to be filled per season</div>
+  <div class="sec">National rankings</div>
+  <div class="placeholder"><i class="ti ti-list-numbers" style="font-size:20px;display:block;margin-bottom:.375rem"></i>National rankings in key categories — to be filled</div>
+  <div class="sec">Conference standings</div>
+  <div class="placeholder"><i class="ti ti-table" style="font-size:20px;display:block;margin-bottom:.375rem"></i>Sun Belt / Big 12 standings each year — to be filled</div>
+  <div class="sec">Individual player leaders</div>
+  <div class="placeholder"><i class="ti ti-user" style="font-size:20px;display:block;margin-bottom:.375rem"></i>Passing · rushing · receiving · defense leaders — to be filled</div>
+</div>
+
+<!-- ═══ AWARDS ═══ -->
+<div class="page" id="p-awards">
+  <h2>Awards</h2>
+  <p class="sub">All individual honors won by ULM players under Coach Obonga</p>
+
+  <div class="sec">Heisman Trophy</div>
+  <div class="raised">
+    <div class="award-row"><span style="font-weight:600">🏆 Barry Abreu HB — Winner</span><span class="yr-chip">2032 — first in program history</span></div>
+    <div class="award-row"><span style="font-weight:600">🏆 James Laird HB — Winner</span><span class="yr-chip">2034</span></div>
+    <div class="award-row"><span style="font-weight:600">🏆 Tyler Portilla HB — Winner</span><span class="yr-chip">2036</span></div>
+    <div class="award-row"><span style="color:var(--color-text-secondary)">Jaydon Wright HB — 2nd place</span><span class="yr-chip">2027</span></div>
+    <div class="award-row"><span style="color:var(--color-text-secondary)">James Jackson HB — 3rd place</span><span class="yr-chip">2030</span></div>
+    <div class="award-row"><span style="color:var(--color-text-secondary)">Doug Eby QB — 2nd place</span><span class="yr-chip">2031</span></div>
+    <div class="award-row"><span style="color:var(--color-text-secondary)">James Laird HB — 2nd place</span><span class="yr-chip">2033</span></div>
+  </div>
+
+  <div class="sec">Doak Walker Award (RB of the Year)</div>
+  <div class="raised">
+    <div class="award-row"><span>Jaydon Wright</span><span class="yr-chip">2027</span></div>
+    <div class="award-row"><span>James Jackson</span><span class="yr-chip">2030</span></div>
+    <div class="award-row"><span>Barry Abreu</span><span class="yr-chip">2032</span></div>
+    <div class="award-row"><span>James Laird</span><span class="yr-chip">2033</span></div>
+    <div class="award-row"><span>James Laird</span><span class="yr-chip">2034</span></div>
+    <div class="award-row"><span>Tyler Portilla</span><span class="yr-chip">2036</span></div>
+  </div>
+
+  <div class="sec">John Mackey Award (TE of the Year)</div>
+  <div class="raised">
+    <div class="award-row"><span>Larry Rust</span><span class="yr-chip">2037</span></div>
+  </div>
+
+  <div class="sec">Maxwell Award (Player of the Year)</div>
+  <div class="raised">
+    <div class="award-row"><span>Barry Abreu</span><span class="yr-chip">2032</span></div>
+    <div class="award-row"><span>James Laird</span><span class="yr-chip">2034</span></div>
+    <div class="award-row"><span>Tyler Portilla</span><span class="yr-chip">2036</span></div>
+  </div>
+
+  <div class="sec">Walter Camp Award</div>
+  <div class="raised">
+    <div class="award-row"><span>Barry Abreu</span><span class="yr-chip">2032</span></div>
+    <div class="award-row"><span>James Laird</span><span class="yr-chip">2034</span></div>
+    <div class="award-row"><span>Tyler Portilla</span><span class="yr-chip">2036</span></div>
+  </div>
+
+  <div class="sec">Defensive awards</div>
+  <div class="raised">
+    <div class="award-row"><span>Joey Latimer LEDG — Bednarik · Nagurski · Lombardi · DE of Year</span><span class="yr-chip">2031</span></div>
+    <div class="award-row"><span>Ty York SS — Bednarik · Nagurski · Jim Thorpe</span><span class="yr-chip">2032</span></div>
+  </div>
+
+  <div class="sec">Jet Award (Returner of the Year)</div>
+  <div class="raised">
+    <div class="award-row"><span>Jeremy Nagy WR</span><span class="yr-chip">2031</span></div>
+    <div class="award-row"><span>Frank Dzubnar WR</span><span class="yr-chip">2035</span></div>
+  </div>
+
+  <div class="sec">Bear Bryant Coach of the Year</div>
+  <div class="raised">
+    <div class="award-row"><span>Barack Obonga — finalist</span><span class="yr-chip">2034</span></div>
+  </div>
+
+  <div class="sec">All-Americans (1st Team)</div>
+  <div class="raised">
+    <div class="award-row"><span>Ty York SS</span><span class="yr-chip">2031 · 2032</span></div>
+    <div class="award-row"><span>Joey Latimer LEDG</span><span class="yr-chip">2031</span></div>
+    <div class="award-row"><span>Barry Abreu HB</span><span class="yr-chip">2032</span></div>
+    <div class="award-row"><span>James Laird HB</span><span class="yr-chip">2034</span></div>
+    <div class="award-row"><span>Tyler Portilla HB</span><span class="yr-chip">2036</span></div>
+    <div class="award-row"><span style="color:var(--color-text-secondary)">Nolan Schleuger LEDG — 2nd Team</span><span class="yr-chip">2037</span></div>
+    <div class="award-row"><span style="color:var(--color-text-secondary)">Isaiah Pryor HB — 2nd Team</span><span class="yr-chip">2037</span></div>
+  </div>
+
+  <div class="sec">NFL Draft — all 21 confirmed picks</div>
+  <div class="raised">
+    <div class="award-row"><span>Glenn Hagg C <span class="badge bgr">Rd 7</span></span><span class="yr-chip">2029 — first ever pick under Obonga</span></div>
+    <div class="award-row"><span>Barry Abreu HB <span class="badge bgr">Rd 4</span></span><span class="yr-chip">2033</span></div>
+    <div class="award-row"><span style="font-weight:600">Niles Mondeaux RT <span class="badge bg">Rd 1</span></span><span class="yr-chip">2034 — first 1st-rounder in program history</span></div>
+    <div class="award-row"><span>Ofisa Yee SAM <span class="badge bgr">Rd 4</span></span><span class="yr-chip">2034</span></div>
+    <div class="award-row"><span>Jacoby Ware LG <span class="badge bgr">Rd 4</span></span><span class="yr-chip">2034</span></div>
+    <div class="award-row"><span>Delontae Kight HB <span class="badge bgr">Rd 4</span></span><span class="yr-chip">2036</span></div>
+    <div class="award-row"><span>Chris Balogh LEDG <span class="badge bgr">Rd 7</span></span><span class="yr-chip">2036</span></div>
+    <div class="award-row"><span>Charles Ismail CB <span class="badge bgr">Rd 7</span></span><span class="yr-chip">2036</span></div>
+    <div class="award-row"><span>Cortez Kaesviharn QB <span class="badge bgr">Rd 4</span></span><span class="yr-chip">2037</span></div>
+    <div class="award-row"><span>Tua Chiu REDG <span class="badge bb">Rd 2</span></span><span class="yr-chip">2037</span></div>
+    <div class="award-row"><span>Tyler Portilla HB <span class="badge bb">Rd 2</span></span><span class="yr-chip">2037</span></div>
+    <div class="award-row"><span style="font-weight:600">Justice Golden DT <span class="badge bg">Rd 1</span></span><span class="yr-chip">2038</span></div>
+    <div class="award-row"><span>Allen Neighbors CB <span class="badge bb">Rd 2</span></span><span class="yr-chip">2038 — early entry</span></div>
+    <div class="award-row"><span>Deontay Cantrell DT <span class="badge bb">Rd 2</span></span><span class="yr-chip">2038 — early entry</span></div>
+    <div class="award-row"><span>Leati Bullitt WILL <span class="badge bb">Rd 2</span></span><span class="yr-chip">2038</span></div>
+    <div class="award-row"><span>Isaiah Pryor HB <span class="badge bp">Rd 3</span></span><span class="yr-chip">2038 — early entry</span></div>
+    <div class="award-row"><span>Jameson Yates REDG <span class="badge bp">Rd 3</span></span><span class="yr-chip">2038</span></div>
+    <div class="award-row"><span>Jeff Schaffer MIKE <span class="badge bgr">Rd 4</span></span><span class="yr-chip">2038</span></div>
+    <div class="award-row"><span>Ruben Childs WR <span class="badge bgr">Rd 4</span></span><span class="yr-chip">2038</span></div>
+    <div class="award-row"><span>Darrell Godwin WR <span class="badge bgr">Rd 5</span></span><span class="yr-chip">2038</span></div>
+    <div class="award-row"><span>Ethan Onwuasor RT <span class="badge bgr">Rd 5</span></span><span class="yr-chip">2038</span></div>
+  </div>
+  <div class="warn-note">⚠️ Sterling Copper (WR) appears in some records as a 7th-round pick but departure table says "Graduation" — needs clarification. Jaydon Wright played in the NFL (retired 2038 to return as RB coach) but draft round not documented.</div>
+</div>
+
+<!-- ═══ HOF ═══ -->
+<div class="page" id="p-hof">
+  <h2>Hall of Fame</h2>
+  <p class="sub">ULM's most important players of the Obonga era</p>
+
+  <div class="sec">Ring of Honor — elite tier</div>
+  <div class="hof-card hof-ring">
+    <div class="hof-name">James Laird HB · 2031–2034</div>
+    <div class="hof-meta">93 OVR · 🏆 Heisman ×2 (2034 winner, 2033 finalist) · Doak Walker ×2 · Maxwell · Walter Camp · 1st Team All-American</div>
+    <div class="hof-stat">4,195 rush YDS · 55 TD · 10.3 YPC peak · 2× 2,000+ yard seasons · powered first Big 12 Championship</div>
+  </div>
+  <div class="hof-card hof-ring">
+    <div class="hof-name">Barry Abreu HB · 2029–2032</div>
+    <div class="hof-meta">91 OVR · 🏆 Heisman (2032) · Doak Walker · Maxwell · Walter Camp · 4th-round pick 2033</div>
+    <div class="hof-stat">6,321 career all-purpose YDS · 65 total TD · 2,477 YDS in 2032 · First Heisman winner in program history</div>
+  </div>
+  <div class="hof-card hof-ring">
+    <div class="hof-name">Niles Mondeaux RT · 2030–2033</div>
+    <div class="hof-meta">97 OVR · 2nd Team All-American · 1st Team All-Sun Belt · 1st-round pick 2034 — first in program history</div>
+    <div class="hof-stat">0 sacks allowed (2033) · anchored nation's #1 rushing offense (204.2 YPG)</div>
+  </div>
+  <div class="hof-card hof-ring">
+    <div class="hof-name">Taylor Van Buren QB · 2028–2030</div>
+    <div class="hof-meta">87 OVR · 3× Sun Belt OPotW · program's first elite QB</div>
+    <div class="hof-stat">12,799 career pass YDS · 99 TD · 64 INT · laid the foundation for the championship era</div>
+  </div>
+
+  <div class="sec">Hall of Fame tier</div>
+  <div class="hof-card">
+    <div class="hof-name">Cortez Kaesviharn QB · 2033–2036</div>
+    <div class="hof-meta">92 OVR · 4th-round pick · 2× Big 12 OPotW · led ULM to back-to-back 11-win Big 12 seasons</div>
+    <div class="hof-stat">5,761 pass YDS · 71 TD · 28 INT · QB of the 2037 national championship run</div>
+  </div>
+  <div class="hof-card">
+    <div class="hof-name">Tyler Portilla HB · 2033–2036</div>
+    <div class="hof-meta">🏆 Heisman 2036 · 2nd-round pick 2037 · 1st Team All-American</div>
+    <div class="hof-stat">3,237 scrimmage YDS · 34 TD · Program Legends grid</div>
+  </div>
+  <div class="hof-card">
+    <div class="hof-name">Ty York SS · 2030–2032</div>
+    <div class="hof-meta">85 OVR · Bednarik · Nagurski · Jim Thorpe · 2× 1st Team All-American</div>
+    <div class="hof-stat">342 career TAK · 75 TFL · 16.5 SCK · 10 INT · 20× Sun Belt DPotW</div>
+  </div>
+  <div class="hof-card">
+    <div class="hof-name">James Jackson HB · 2027–2030</div>
+    <div class="hof-meta">79 OVR · Doak Walker · 1st Team All-American · 8× Sun Belt OPotW</div>
+    <div class="hof-stat">4,012 all-purpose YDS · 34 total TD · 2-star to All-American development story</div>
+  </div>
+  <div class="hof-card">
+    <div class="hof-name">Sterling Copper WR · 2032–2035</div>
+    <div class="hof-meta">90 OVR · 3× conference champion · program's all-time leading WR</div>
+    <div class="hof-stat">2,117 career rec YDS · 22 TD · 4-year contributor</div>
+  </div>
+  <div class="hof-card">
+    <div class="hof-name">Jacoby Ware LG · 2030–2033</div>
+    <div class="hof-meta">91 OVR · 1st Team All-Sun Belt · 4th-round pick 2034</div>
+    <div class="hof-stat">0 sacks allowed (2033) · part of OL allowing only 8 sacks all season</div>
+  </div>
+  <div class="hof-card">
+    <div class="hof-name">Najee Ring WR · 2030</div>
+    <div class="hof-meta">78 OVR · 1st Team All-Sun Belt · 1× Sun Belt OPotW</div>
+    <div class="hof-stat">1,550 rec YDS · 11 TD in lone ULM season · 25.4 YPC avg · one of the most explosive WR seasons in program history</div>
+  </div>
+
+  <div class="sec">Program legends</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+    <div class="hof-card"><div class="hof-name" style="font-size:12px">Glenn Hagg C</div><div class="hof-meta" style="font-size:10px">First ULM draft pick under Obonga (2029, Rd 7) · 0 sacks allowed</div></div>
+    <div class="hof-card"><div class="hof-name" style="font-size:12px">Tony Canonico LT</div><div class="hof-meta" style="font-size:10px">5-year original signee · 2 career sacks allowed</div></div>
+    <div class="hof-card"><div class="hof-name" style="font-size:12px">Keldon Tam LG</div><div class="hof-meta" style="font-size:10px">1st Team All-Big 12 · 4 sacks in 55 games</div></div>
+    <div class="hof-card"><div class="hof-name" style="font-size:12px">Joaquin Gallon C</div><div class="hof-meta" style="font-size:10px">0 career sacks allowed in 32 games</div></div>
+    <div class="hof-card"><div class="hof-name" style="font-size:12px">Keenan Lyles WR</div><div class="hof-meta" style="font-size:10px">1,466 career rec YDS · 14 TD · 4-year contributor</div></div>
+    <div class="hof-card"><div class="hof-name" style="font-size:12px">Larry Rust TE</div><div class="hof-meta" style="font-size:10px">John Mackey 2037 · 953 rec YDS · key blocker in title run</div></div>
+    <div class="hof-card"><div class="hof-name" style="font-size:12px">Jelani Roland CB</div><div class="hof-meta" style="font-size:10px">81-yd pick-six sealed the 2037 national title</div></div>
+    <div class="hof-card"><div class="hof-name" style="font-size:12px">Lawrence Crook K</div><div class="hof-meta" style="font-size:10px">Walk-off 26-yd FG with 0:07 left — 2037 National Championship</div></div>
+  </div>
+</div>
+
+<!-- ═══ COACHING ═══ -->
+<div class="page" id="p-coaching">
+  <h2>Coaching Staff</h2>
+  <p class="sub">Every season's full staff · Barack Obonga era</p>
+
+  <div class="sec">Era summary</div>
+  <div class="tbl-wrap">
+  <table class="tbl">
+    <thead><tr><th>Era</th><th>Seasons</th><th>Record</th><th>Key notes</th></tr></thead>
+    <tbody>
+      <tr><td>Building Phase</td><td>2025–2028</td><td>18–32</td><td>Obonga establishes culture · 3 losing seasons · both coordinators replaced after 2028</td></tr>
+      <tr><td>Breakthrough</td><td>2029–2031</td><td>27–13</td><td>New OC/DC transform program · first bowl win (2030) · first 10-win season (2031)</td></tr>
+      <tr><td>SBC Dynasty</td><td>2032–2033</td><td>23–5</td><td>Back-to-back CCG wins · Abreu Heisman · first CFP appearance</td></tr>
+      <tr><td>Big 12 Arrival</td><td>2034–2035</td><td>25–5</td><td>Conference title Year 1 · Laird Heisman · CFP Semifinal</td></tr>
+      <tr><td>Championship Era</td><td>2036–2037</td><td>29–4</td><td>Portilla Heisman · NCG loss (2036) + NCG win 🏆 (2037)</td></tr>
+      <tr><td>Post-Title Rebuild</td><td>2038–2039</td><td>9–5+</td><td>9-player draft exodus · 0-3 Big 12 start · rebuilding</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="sec">Season staff detail</div>
+  <div class="season-tabs" id="coach-tabs"></div>
+  <div id="coach-content">
+    <div class="placeholder">
+      <i class="ti ti-briefcase" style="font-size:26px;display:block;margin-bottom:.625rem"></i>
+      Select a season above to view that year's full coaching staff.<br>Paste your full staff tables season by season.
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RECRUITING ═══ -->
+<div class="page" id="p-recruiting">
+  <h2>Recruiting</h2>
+  <p class="sub">Class rankings · top commits · transfer portal activity</p>
+
+  <div class="sec">Class rankings by year</div>
+  <div class="tbl-wrap">
+  <table class="tbl">
+    <thead><tr><th>Year</th><th>Nat. rank</th><th>Total</th><th>5★</th><th>4★</th><th>3★</th><th>Points</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>2026</td><td>#101</td><td>25</td><td>0</td><td>0</td><td>7</td><td>149.75</td><td>Year 2, SBC</td></tr>
+      <tr><td>2027</td><td>#75</td><td>18</td><td>0</td><td>0</td><td>12</td><td>159.7</td><td></td></tr>
+      <tr><td>2028</td><td>#86</td><td>24</td><td>0</td><td>0</td><td>11</td><td>152.2</td><td></td></tr>
+      <tr><td>2029</td><td>#44</td><td>26</td><td>1</td><td>19</td><td>6</td><td>179.2</td><td>First 4-star class</td></tr>
+      <tr><td>2030</td><td>#37</td><td>33</td><td>0</td><td>3</td><td>26</td><td>192.95</td><td></td></tr>
+      <tr><td>2031</td><td>#34</td><td>28</td><td>0</td><td>4</td><td>24</td><td>193.0</td><td></td></tr>
+      <tr><td>2032</td><td>#26</td><td>23</td><td>0</td><td>7</td><td>16</td><td>206.1</td><td>First top-30 class</td></tr>
+      <tr><td>2033</td><td>#29</td><td>30</td><td>0</td><td>7</td><td>20</td><td>203.8</td><td></td></tr>
+      <tr><td>2034</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Big 12 Year 1 — to be filled</td></tr>
+      <tr><td>2035</td><td>#20</td><td>30</td><td>0</td><td>11</td><td>18</td><td>222.3</td><td></td></tr>
+      <tr><td>2036</td><td>#21</td><td>21</td><td>1</td><td>9</td><td>11</td><td>219.6</td><td>Joey Speed (5★)</td></tr>
+      <tr><td>2037</td><td><span class="badge bg">#7</span></td><td>23</td><td>2</td><td>13</td><td>8</td><td>237.5</td><td>Program best ever</td></tr>
+      <tr><td>2038</td><td>#19</td><td>19</td><td>1</td><td>10</td><td>8</td><td>218.55</td><td>Post-title bump</td></tr>
+      <tr><td>2039</td><td>#19</td><td>19</td><td>1</td><td>10</td><td>8</td><td>218.55</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="sec">Top recruits all-time</div>
+  <div class="raised">
+    <div class="award-row"><span>Joey Speed QB — 5★ · #22 nationally</span><span class="yr-chip">2036 class</span></div>
+    <div class="award-row"><span>Spencer Worthy DT — 5★ · #15 nationally</span><span class="yr-chip">2039 class</span></div>
+    <div class="award-row"><span>Marco Pritchett DT — 4★ · #1 DT (transfer)</span><span class="yr-chip">2039 class</span></div>
+    <div class="award-row"><span>Tua Chiu REDG — 4★ · #1 REDG nationally</span><span class="yr-chip">2036 class</span></div>
+    <div class="award-row"><span>Justice Golden DT — 4★ · #3 DT nationally</span><span class="yr-chip">2036 class</span></div>
+    <div class="award-row"><span>Leati Bullitt WILL — 3★ · #1 WILL nationally</span><span class="yr-chip">2037 class</span></div>
+    <div class="award-row"><span>Allen Neighbors CB — 4★ transfer</span><span class="yr-chip">2036 class</span></div>
+    <div class="award-row"><span>Isaiah Pryor HB — 4★</span><span class="yr-chip">2034 class</span></div>
+  </div>
+</div>
+
+<!-- ═══ LORE ═══ -->
+<div class="page" id="p-lore">
+  <h2>Lore &amp; Story Archive</h2>
+  <p class="sub">Narrative history · key moments · dynasty lore</p>
+
+  <div class="sec">The foundation (2025–2028 · Years 1–4)</div>
+  <div class="raised" style="font-size:12.5px;line-height:1.8">First-time HC Barack Obonga arrives at ULM with a D+ prestige rating and a spread offense, inheriting a program that had never made a bowl game. Year 1 ends 6–7 with a heartbreaking triple-OT bowl loss on a failed 2-point conversion. Year 2 brings a 3–9 sophomore slump. The program nearly fires Obonga after Year 4 (5–8). Instead, both coordinators are replaced heading into Year 5.</div>
+
+  <div class="sec">Breaking through (2029–2031 · Years 5–7)</div>
+  <div class="raised" style="font-size:12.5px;line-height:1.8">New coordinators James Anderson and Alex Carman transform the program. Year 5 ULM breaks a 9-year Louisiana Tech losing streak en route to a 7–6 bowl season — the program's first bowl win over FIU, 52–50 in the Boca Raton Bowl. Year 7 (2031) brings a school-record 12–2 finish, a #25 national ranking, Doug Eby as a Heisman finalist, and ULM's first Sun Belt West Division title.</div>
+
+  <div class="sec">The Heisman era (2032–2036 · Years 8–12)</div>
+  <div class="raised" style="font-size:12.5px;line-height:1.8">2032: Barry Abreu wins the first Heisman in program history. ULM goes 11–3, perfect 9–0 in the Sun Belt, and makes its first CFP appearance. Obonga declines the Michigan State HC job to stay in Monroe. 2034: James Laird wins the Heisman. ULM joins the Big 12 and wins the conference championship in Year 1, reaching the CFP Semifinal. 2036: Tyler Portilla wins the third Heisman in five years. Three Heismans — all running backs. It defined who ULM was.</div>
+
+  <div class="sec">The 2037 national championship (Year 13)</div>
+  <div class="raised" style="font-size:12.5px;line-height:1.8">ULM enters the season ranked #7 but loses twice in the regular season. As the #12 CFP seed, the Warhawks shock #5 Texas, demolish #4 Penn State 52–6 in the Sugar Bowl, and defeat #8 Georgia in the Peach Bowl. In the National Championship in New Orleans, Lawrence Crook's walk-off 26-yard field goal with 0:07 remaining — set up by Jelani Roland's 81-yard pick-six off pressure from Neil Schleuger — seals a 17–15 title over #2 USC. ULM's miracle run is complete. The program that couldn't win a bowl game in 2025 was national champion in 2037.</div>
+
+  <div class="sec">The Colorado rivalry</div>
+  <div class="raised" style="font-size:12.5px;line-height:1.8">They became ULM's defining nemesis the moment the Warhawks joined the Big 12. Colorado and ULM have met eight times, splitting the series 4–4 — but the location tells the real story. ULM is 3–0 at home, 1–4 anywhere else. The lateral interception with 24 seconds left in 2037. The two-kickoff-return-touchdown CCG collapse in 2035. Gammon's 353-yard evisceration in the 2038 championship game. Colorado has broken ULM's heart on the biggest stages. The rivalry isn't over.</div>
+
+  <div class="sec">The coordinator factory</div>
+  <div class="raised" style="font-size:12.5px;line-height:1.8">ULM's greatest program strength is its ability to produce coordinators who leave for Power 4 HC jobs, replaced seamlessly from within. Anderson left for Mississippi State HC. Carman left for Wisconsin DC. Ramsey and Washington both departed after 2036. Each time, Tank Williams and Bulldog Henderson — 13 and 12 years on staff respectively — stepped up and preserved the dynasty's identity without missing a beat.</div>
+
+  <div class="sec">The 2038 exodus</div>
+  <div class="raised" style="font-size:12.5px;line-height:1.8">Nine players drafted in a single year. Six in rounds 1–3. The 2038 NFL Draft gutted the roster in ways that couldn't be patched overnight. A 0–3 Big 12 start followed. A CCG loss to Colorado. An Alamo Bowl loss to Boise State on a last-second score. The dynasty didn't end — but it entered a new phase. The question heading into 2039 is whether Obonga can reload the way he once rebuilt.</div>
+
+  <div class="placeholder" style="margin-top:.875rem">
+    <i class="ti ti-edit" style="font-size:20px;display:block;margin-bottom:.375rem"></i>
+    Additional lore entries to be added — game recaps, season narratives, player stories
+  </div>
+</div>
+
+<!-- ═══ NOTION GUIDE ═══ -->
+<div class="page" id="p-notion">
+  <h2>Notion Upload Guide</h2>
+  <p class="sub">Step-by-step instructions for getting this hub into Notion with tabs</p>
+
+  <div class="sec">Step 1 — Download the markdown export</div>
+  <div class="raised" style="font-size:12.5px;line-height:1.8">
+    Go back to the Claude chat and download the file <strong>ULM_Warhawks_Dynasty_Notion_Export.md</strong>. This is the full content in a format Notion can import directly.
+  </div>
+
+  <div class="sec">Step 2 — Import into Notion</div>
+  <div class="raised" style="font-size:12.5px;line-height:1.8">
+    1. Open Notion → click <strong>+ New page</strong> in the sidebar<br>
+    2. Title it: <strong>ULM Warhawks Dynasty Hub</strong><br>
+    3. Click the <strong>···</strong> menu (top right of the page) → <strong>Import</strong> → <strong>Markdown &amp; CSV</strong><br>
+    4. Select your downloaded <code>.md</code> file<br>
+    5. Notion imports all headers, tables, and content automatically — takes ~10 seconds
+  </div>
+
+  <div class="sec">Step 3 — Build the tab structure (sidebar navigation)</div>
+  <div class="raised" style="font-size:12.5px;line-height:1.8">
+    Notion doesn't have a native sidebar-tab system like this hub, but you can recreate it two ways:<br><br>
+    <strong>Option A — Sub-pages (recommended):</strong><br>
+    Each section (Overview, Schedule, Roster, etc.) becomes its own sub-page. On your main Hub page, type <code>/page</code> and create a page for each tab. Then copy-paste the relevant section into that page. Notion shows sub-pages in the left sidebar automatically.<br><br>
+    <strong>Option B — Table of Contents block:</strong><br>
+    Keep everything on one long page. Add a <code>/table of contents</code> block at the top — it auto-generates clickable links to every heading on the page. Click any header and it jumps there instantly.<br><br>
+    <strong>Option C — Linked Database view:</strong><br>
+    For the Schedule and Roster tabs, use a Notion database (table view). Each row = one game or one player. You can filter and sort. Type <code>/table</code> to start.
+  </div>
+
+  <div class="sec">Step 4 — Format the content in Notion</div>
+  <div class="raised" style="font-size:12.5px;line-height:1.8">
+    After import, clean up the formatting:<br><br>
+    • Big section headers (<strong>OVERVIEW</strong>, <strong>AWARDS</strong>, etc.) → highlight and press <code>H1</code><br>
+    • Sub-section headers → highlight and press <code>H2</code><br>
+    • Callout blocks (⚠️ notes) → type <code>/callout</code> and paste the text<br>
+    • Stat card rows (131–64, home/away) → use <code>/columns</code> to put them side by side<br>
+    • Any table → type <code>/table</code> or paste directly (Notion auto-detects markdown tables)<br>
+    • Win/Loss badges → add colored text manually using the text color tool (A icon)
+  </div>
+
+  <div class="sec">Step 5 — Add icons &amp; cover</div>
+  <div class="raised" style="font-size:12.5px;line-height:1.8">
+    • Click <strong>Add icon</strong> at the top of your Hub page → use 🏈 or the ULM logo<br>
+    • Click <strong>Add cover</strong> → upload a Malone Stadium photo or a ULM-themed image<br>
+    • For each sub-page (Schedule, Roster, etc.), add a matching icon to make navigation easier
+  </div>
+
+  <div class="sec">Shells still to be filled</div>
+  <div class="raised">
+    <div class="award-row"><span>Schedule</span><span class="yr-chip">2025 + 2032 loaded · all others are placeholders</span></div>
+    <div class="award-row"><span>Roster</span><span class="yr-chip">All 15 seasons — paste depth charts as you go</span></div>
+    <div class="award-row"><span>Stats</span><span class="yr-chip">Team offense · defense · rankings · leaders</span></div>
+    <div class="award-row"><span>Coaching</span><span class="yr-chip">Full staff tables per season</span></div>
+    <div class="award-row"><span>Draft — verify</span><span class="yr-chip">Sterling Copper status · Jaydon Wright round</span></div>
+  </div>
+</div>
+
+</div><!-- end .content -->
+</div><!-- end .hub -->
+
+<script>
+const seasons = [2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039];
+
+const schedules = {
+  2025:[
+    {wk:'0',opp:'@ Northwestern',loc:'away',result:'L',score:'3–33',note:'QB1 Armenta rib injury on the road opener'},
+    {wk:'1',opp:'BYE',loc:'bye',result:'',score:'',note:''},
+    {wk:'2',opp:'@ #22 Alabama',loc:'away',result:'L',score:'7–31',note:'Andre Mack FF'},
+    {wk:'3',opp:'vs Missouri State',loc:'home',result:'W',score:'17–14',note:'First win for Coach Obonga! Game-winning FG'},
+    {wk:'4',opp:'vs UTEP',loc:'home',result:'W',score:'42–28',note:'Armenta secured as QB1'},
+    {wk:'5',opp:'@ Arkansas State',loc:'away',result:'W',score:'14–6',note:'First Sun Belt conference game win'},
+    {wk:'6',opp:'@ Marshall',loc:'away',result:'L',score:'22–28',note:'Got it together late, ran out of time'},
+    {wk:'7',opp:'BYE',loc:'bye',result:'',score:'',note:''},
+    {wk:'8',opp:'@ Troy',loc:'away',result:'W',score:'27–24',note:'McCreynolds showed out'},
+    {wk:'9',opp:'vs Southern Miss',loc:'home',result:'W',score:'36–21',note:''},
+    {wk:'10',opp:'@ JMU',loc:'away',result:'L',score:'23–31',note:''},
+    {wk:'11',opp:'BYE',loc:'bye',result:'',score:'',note:''},
+    {wk:'12',opp:'@ South Alabama',loc:'away',result:'L',score:'10–20',note:''},
+    {wk:'13',opp:'vs Texas State',loc:'home',result:'W',score:'31–24',note:''},
+    {wk:'14',opp:'vs Louisiana',loc:'home',result:'L',score:'10–28',note:'Rivalry game'},
+    {wk:'Bowl',opp:'vs Liberty',loc:'neutral',result:'L',score:'32–34 (3OT)',note:'First bowl in Obonga era. Triple OT. Failed 2-point conversion sealed the loss.'},
+  ],
+  2032:[
+    {wk:'0',opp:'vs Houston',loc:'home',result:'W',score:'35–16',note:'Upset ranked opponent in season opener'},
+    {wk:'1',opp:'@ #22 Arizona State',loc:'away',result:'L',score:'31–34 (OT)',note:'Heartbreaking OT loss — had the lead late'},
+    {wk:'2',opp:'BYE',loc:'bye',result:'',score:'',note:''},
+    {wk:'3',opp:'@ Buffalo',loc:'away',result:'W',score:'42–17',note:'Dominant road performance'},
+    {wk:'4',opp:'@ North Carolina',loc:'away',result:'L',score:'27–30',note:'Late INT cost the victory'},
+    {wk:'5',opp:'BYE',loc:'bye',result:'',score:'',note:''},
+    {wk:'6',opp:'@ Georgia Southern',loc:'away',result:'W',score:'45–17',note:'Sun Belt opener blowout'},
+    {wk:'7',opp:'@ Louisiana Tech',loc:'away',result:'W',score:'31–23',note:'Abreu bruised ribs — still produced'},
+    {wk:'8',opp:'vs Coastal Carolina',loc:'home',result:'W',score:'42–17',note:'Dominant home win'},
+    {wk:'9',opp:'@ #20 Southern Miss',loc:'away',result:'W',score:'45–24',note:'Abreu breaks school rushing record (276 yds) · ULM ranked #20'},
+    {wk:'10',opp:'vs Arkansas State',loc:'home',result:'W',score:'49–20',note:'Abreu torches former SBC rival'},
+    {wk:'11',opp:'vs Troy',loc:'home',result:'W',score:'29–10',note:'Abreu rises to #1 in Heisman race'},
+    {wk:'12',opp:'@ Louisiana',loc:'away',result:'W',score:'38–7',note:'Dominant road rivalry win · Perfect 7-0 in SBC'},
+    {wk:'13',opp:'vs South Alabama',loc:'home',result:'W',score:'44–3',note:'Senior Night blowout · Perfect 8-0 in SBC'},
+    {wk:'CCG',opp:'vs Marshall',loc:'neutral',result:'W',score:'45–7',note:'SUN BELT CHAMPIONS 🏆 — First conference title in program history'},
+    {wk:'CFP R1',opp:'@ #5 Michigan State',loc:'away',result:'L',score:'28–35',note:'First CFP appearance. Dream season comes to an end in East Lansing.'},
+  ]
+};
+
+function nav(el, id){
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('on'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('p-'+id).classList.add('on');
+}
+
+function buildSchedTabs(){
+  const el = document.getElementById('sched-tabs');
+  seasons.forEach(yr=>{
+    const b = document.createElement('button');
+    b.className='stab'+(yr===2025?' on':'');
+    b.textContent=yr;
+    b.onclick=()=>loadSched(yr,b);
+    el.appendChild(b);
+  });
+  loadSched(2025, el.querySelector('.stab.on'));
+}
+
+function loadSched(yr, btn){
+  document.querySelectorAll('#sched-tabs .stab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('game-detail').style.display='none';
+  const list = document.getElementById('sched-list');
+  const games = schedules[yr];
+  if(!games){
+    list.innerHTML=`<div class="placeholder"><i class="ti ti-calendar" style="font-size:24px;display:block;margin-bottom:.625rem"></i>${yr} schedule — to be added</div>`;
+    return;
+  }
+  let html='';
+  games.forEach((g,i)=>{
+    if(g.loc==='bye'){
+      html+=`<div class="game-row bye"><span class="wk-lbl">${g.wk}</span><span style="color:var(--color-text-tertiary)">— BYE WEEK —</span><span></span><span></span></div>`;
+    } else {
+      const pill = g.result==='W'?'pw':g.result==='L'?'pl':'pn';
+      const res = g.result?`<span class="${pill}">${g.result} ${g.score}</span>`:`<span class="pn">Upcoming</span>`;
+      html+=`<div class="game-row" onclick="openGame(${i},${yr})"><span class="wk-lbl">${g.wk}</span><span>${g.opp}</span>${res}<span style="font-size:11px;color:var(--color-text-tertiary)">›</span></div>`;
+    }
+  });
+  list.innerHTML=html;
+}
+
+function openGame(idx, yr){
+  const g = schedules[yr][idx];
+  const pill = g.result==='W'?'pw':g.result==='L'?'pl':'pn';
+  const res = g.result?`<span class="${pill}">${g.result} ${g.score}</span>`:`<span class="pn">Upcoming</span>`;
+  const panel = document.getElementById('game-detail');
+  panel.style.display='block';
+  panel.innerHTML=`
+    <div class="detail-panel">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.875rem">
+        <div>
+          <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Week ${g.wk} · ${yr} · ${g.loc==='home'?'Home':g.loc==='away'?'Away':'Neutral'}</div>
+          <div style="font-size:15px;font-weight:600;margin-bottom:6px">${g.opp}</div>
+          ${res}
+        </div>
+        <button class="detail-close" onclick="document.getElementById('game-detail').style.display='none'">Close ×</button>
+      </div>
+      ${g.note?`<div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:.875rem;padding:.625rem .875rem;background:var(--color-background-primary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);line-height:1.6">${g.note}</div>`:''}
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-lbl">Passing</div><div class="stat-val" style="color:var(--color-text-tertiary)">— to be added</div></div>
+        <div class="stat-box"><div class="stat-lbl">Rushing</div><div class="stat-val" style="color:var(--color-text-tertiary)">— to be added</div></div>
+        <div class="stat-box"><div class="stat-lbl">Total offense</div><div class="stat-val" style="color:var(--color-text-tertiary)">— to be added</div></div>
+        <div class="stat-box"><div class="stat-lbl">Turnovers</div><div class="stat-val" style="color:var(--color-text-tertiary)">— to be added</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:.5rem">Key players · play-by-play highlights · game notes — to be filled in</div>
+    </div>`;
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function buildRosterTabs(){
+  const el = document.getElementById('roster-tabs');
+  seasons.forEach(yr=>{
+    const b = document.createElement('button');
+    b.className='stab'+(yr===2025?' on':'');
+    b.textContent=yr;
+    b.onclick=()=>{
+      document.querySelectorAll('#roster-tabs .stab').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      document.getElementById('roster-content').innerHTML=`<div class="placeholder"><i class="ti ti-users" style="font-size:26px;display:block;margin-bottom:.625rem"></i>${yr} full depth chart — paste roster here<br><span style="font-size:11px">Offense · Defense · Special Teams</span></div>`;
+    };
+    el.appendChild(b);
+  });
+}
+
+function buildStatsTabs(){
+  const el = document.getElementById('stats-tabs');
+  seasons.forEach(yr=>{
+    const b = document.createElement('button');
+    b.className='stab'+(yr===2025?' on':'');
+    b.textContent=yr;
+    b.onclick=()=>{
+      document.querySelectorAll('#stats-tabs .stab').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    };
+    el.appendChild(b);
+  });
+}
+
+function buildCoachTabs(){
+  const el = document.getElementById('coach-tabs');
+  seasons.forEach(yr=>{
+    const b = document.createElement('button');
+    b.className='stab'+(yr===2025?' on':'');
+    b.textContent=yr;
+    b.onclick=()=>{
+      document.querySelectorAll('#coach-tabs .stab').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      document.getElementById('coach-content').innerHTML=`<div class="placeholder"><i class="ti ti-briefcase" style="font-size:26px;display:block;margin-bottom:.625rem"></i>${yr} coaching staff — paste full staff here<br><span style="font-size:11px">Head coach · OC · DC · position coaches · contracts</span></div>`;
+    };
+    el.appendChild(b);
+  });
+}
+
+buildSchedTabs();
+buildRosterTabs();
+buildStatsTabs();
+buildCoachTabs();
+</script>
+</body>
+</html>
